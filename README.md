@@ -36,6 +36,21 @@ brew tap texel-sensei/commit-lsp https://github.com/texel-sensei/commit-lsp
 brew install commit-lsp
 ```
 
+### Nix flakes
+
+```nix
+# flake.nix
+inputs = {
+  commit-lsp = {
+    url = "github:texel-sensei/commit-lsp";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+};
+```
+
+Then use `inputs.commit-lsp.defaultPackage.${stdenv.hostPlatform.system}` in your config.
+
+
 ### From source
 
 To build commit-lsp from source, make sure to have the latest rust toolchain installed and run:
