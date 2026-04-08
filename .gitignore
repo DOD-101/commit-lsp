@@ -1,7 +1,9 @@
 .*
 !.gitignore
 !.commit-lsp.toml
+!.envrc
 
 *.log
 
 /target
+/result
