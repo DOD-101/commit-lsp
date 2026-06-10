@@ -101,6 +101,13 @@ impl State {
         Some(Item { kind, text, range })
     }
 
+    /// Get the character at `pos` in the document
+    pub fn get_char(&self, pos: Position) -> Option<char> {
+        let line = self.lines.get(pos.line as usize)?;
+
+        line.chars().nth(pos.character as usize)
+    }
+
     pub fn commit_type_info(&self) -> Option<CommitElementDefinition> {
         let ty = self.get_text(self.ty?);
         self.config.types.iter().find(|t| t.name == ty).cloned()

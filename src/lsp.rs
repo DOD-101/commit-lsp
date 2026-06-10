@@ -4,7 +4,7 @@ use tower_lsp::lsp_types::{
     CompletionItem, CompletionItemKind, CompletionItemLabelDetails, CompletionParams,
     CompletionResponse, DidChangeTextDocumentParams, DidOpenTextDocumentParams, Documentation,
     Hover, HoverContents, HoverParams, HoverProviderCapability, InitializeParams, InitializeResult,
-    InitializedParams, MarkedString, MessageType, ServerCapabilities, ServerInfo,
+    InitializedParams, MarkedString, MessageType, Position, ServerCapabilities, ServerInfo,
     TextDocumentSyncCapability, TextDocumentSyncKind, WorkDoneProgressOptions,
 };
 
@@ -224,13 +224,21 @@ impl LanguageServer for Backend {
     }
 
     async fn completion(&self, params: CompletionParams) -> Result<Option<CompletionResponse>> {
+        let leading_char = {
+            let analysis = self.analysis.lock().unwrap();
+
+            analysis.get_char(Position::new(
+                params.text_document_position.position.line,
+                params.text_document_position.position.character - 1,
+            ))
+        };
+
         if params.text_document_position.position.line == 0 {
             let analysis = self.analysis.lock().unwrap();
-            let trigger_character = params.context.and_then(|c| c.trigger_character);
-            if trigger_character.as_ref().is_some_and(|c| c == "#") {
+            if leading_char.as_ref().is_some_and(|c| *c == '#') {
                 return self.ticket_completion(true);
             }
-            let items = if trigger_character.is_some_and(|c| c == "(") {
+            let items = if leading_char.is_some_and(|c| c == '(') {
                 analysis.get_commit_scopes()
             } else {
                 analysis.get_commit_types()
