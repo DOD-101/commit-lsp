@@ -10,6 +10,12 @@ for commit messages based on the conventional commit format.
 
 ![asciicast](./doc/autocomplete.svg)
 
+> [!NOTE]
+> This is my continuation of the project since the upstream repo by
+> @texel-sensei seems unmaintained (no commits for 5 months at the time of
+> writing). Should upstream show activity again and merge my PRs I'd be
+> more than happy to get the changes made here upstreamed.
+
 ## Planned feature set
 
 The following features are implemented (✅), in work (🚧) or
@@ -25,7 +31,7 @@ planned but not yet implemented (❌):
         - ✅ Github
         - ✅ AzureDevOps
         - ✅ Gitlab
-        - ❌ Jira
+        - ~~❌ Jira~~ Not planned (PR welcome)
 
 ## Installation
 
